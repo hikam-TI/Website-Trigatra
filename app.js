@@ -48,6 +48,15 @@ learnButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const topic = btn.getAttribute("data-topic");
     learningContent.innerHTML = learningData[topic] || "<p>Materi belum tersedia.</p>";
+    learningContent.style.opacity = 0;
+    learningContent.style.display = "block";
+    // Animasi fade-in
+    let opacity = 0;
+    const fadeIn = setInterval(() => {
+      opacity += 0.05;
+      learningContent.style.opacity = opacity;
+      if (opacity >= 1) clearInterval(fadeIn);
+    }, 20);
     learningContent.scrollIntoView({ behavior: "smooth" });
   });
 });
@@ -107,6 +116,29 @@ function shuffle(array) {
   return arr;
 }
 
+// Fungsi untuk menampilkan pesan di game (bukan alert)
+function showMessage(msg, isError = false) {
+  let msgBox = document.getElementById("game-message");
+  if (!msgBox) {
+    msgBox = document.createElement("div");
+    msgBox.id = "game-message";
+    msgBox.style.margin = "1rem 0";
+    msgBox.style.padding = "0.75rem 1rem";
+    msgBox.style.borderRadius = "0.5rem";
+    msgBox.style.fontWeight = "600";
+    gameContainer.prepend(msgBox);
+  }
+  msgBox.textContent = msg;
+  msgBox.style.backgroundColor = isError ? "#fee2e2" : "#d1fae5";
+  msgBox.style.color = isError ? "#b91c1c" : "#065f46";
+  msgBox.style.border = isError ? "1px solid #b91c1c" : "1px solid #065f46";
+  setTimeout(() => {
+    msgBox.textContent = "";
+    msgBox.style.border = "none";
+    msgBox.style.backgroundColor = "transparent";
+  }, 3000);
+}
+
 // Game Tebak Kata
 function startTebakKata() {
   let currentQuestion = 0;
@@ -125,26 +157,38 @@ function startTebakKata() {
           )
           .join("")}
       </div>
-      <p>Skor: ${score}</p>
+      <p>Skor: <span id="score">${score}</span></p>
+      <button id="exit-game" class="exit-btn">Keluar Game</button>
     `;
 
     const optionButtons = gameContainer.querySelectorAll(".option-btn");
+    const scoreEl = document.getElementById("score");
+    const exitBtn = document.getElementById("exit-game");
+
     optionButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
         if (btn.textContent === q.answer) {
           score++;
-          alert("Jawaban benar!");
+          showMessage("Jawaban benar!");
         } else {
-          alert(`Salah! Jawaban yang benar: ${q.answer}`);
+          showMessage(`Salah! Jawaban yang benar: ${q.answer}`, true);
         }
+        scoreEl.textContent = score;
         currentQuestion++;
         if (currentQuestion < wordGuessData.length) {
-          renderQuestion();
+          setTimeout(renderQuestion, 1000);
         } else {
-          alert(`Game selesai! Skor Anda: ${score}/${wordGuessData.length}`);
-          gameContainer.innerHTML = "";
+          setTimeout(() => {
+            showMessage(`Game selesai! Skor Anda: ${score}/${wordGuessData.length}`);
+            gameContainer.innerHTML = "";
+          }, 1000);
         }
       });
+    });
+
+    exitBtn.addEventListener("click", () => {
+      gameContainer.innerHTML = "";
+      showMessage("Anda keluar dari game.");
     });
   }
 
@@ -168,15 +212,20 @@ function startSusunKalimat() {
         ${shuffledWords.map((w) => `<button class="word-btn">${w}</button>`).join("")}
       </div>
       <div id="sentence-area" class="sentence-area"></div>
-      <button id="undo-btn" disabled>Undo</button>
-      <button id="submit-btn" disabled>Submit</button>
-      <p>Skor: ${score}</p>
+      <div class="btn-group">
+        <button id="undo-btn" disabled>Undo</button>
+        <button id="submit-btn" disabled>Submit</button>
+        <button id="exit-game" class="exit-btn">Keluar Game</button>
+      </div>
+      <p>Skor: <span id="score">${score}</span></p>
     `;
 
     const wordPool = document.getElementById("word-pool");
     const sentenceArea = document.getElementById("sentence-area");
     const undoBtn = document.getElementById("undo-btn");
     const submitBtn = document.getElementById("submit-btn");
+    const scoreEl = document.getElementById("score");
+    const exitBtn = document.getElementById("exit-game");
 
     wordPool.querySelectorAll("button").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -206,17 +255,25 @@ function startSusunKalimat() {
       const userAnswer = userOrder.join(" ");
       if (userAnswer === correct) {
         score++;
-        alert("Jawaban benar!");
+        showMessage("Jawaban benar!");
       } else {
-        alert(`Jawaban salah! Jawaban yang benar: ${correct}`);
+        showMessage(`Jawaban salah! Jawaban yang benar: ${correct}`, true);
       }
+      scoreEl.textContent = score;
       currentIndex++;
       if (currentIndex < sentenceData.length) {
-        renderGame();
+        setTimeout(renderGame, 1200);
       } else {
-        alert(`Game selesai! Skor Anda: ${score}/${sentenceData.length}`);
-        gameContainer.innerHTML = "";
+        setTimeout(() => {
+          showMessage(`Game selesai! Skor Anda: ${score}/${sentenceData.length}`);
+          gameContainer.innerHTML = "";
+        }, 1200);
       }
+    });
+
+    exitBtn.addEventListener("click", () => {
+      gameContainer.innerHTML = "";
+      showMessage("Anda keluar dari game.");
     });
   }
 
@@ -229,7 +286,6 @@ function startCocokkanKata() {
   let matches = shuffle(matchGameData.map((p) => p.match));
   let selectedWord = null;
   let selectedMatch = null;
-  let matchedPairs = [];
   let score = 0;
 
   function renderGame() {
@@ -246,11 +302,14 @@ function startCocokkanKata() {
           ${matches.map((m) => `<button class="match-btn" data-type="match">${m}</button>`).join("")}
         </div>
       </div>
-      <p>Skor: ${score}</p>
+      <p>Skor: <span id="score">${score}</span></p>
+      <button id="exit-game" class="exit-btn">Keluar Game</button>
     `;
 
     const wordButtons = gameContainer.querySelectorAll('button[data-type="word"]');
     const matchButtons = gameContainer.querySelectorAll('button[data-type="match"]');
+    const scoreEl = document.getElementById("score");
+    const exitBtn = document.getElementById("exit-game");
 
     wordButtons.forEach((btn) =>
       btn.addEventListener("click", () => {
@@ -279,6 +338,11 @@ function startCocokkanKata() {
         checkMatch();
       })
     );
+
+    exitBtn.addEventListener("click", () => {
+      gameContainer.innerHTML = "";
+      showMessage("Anda keluar dari game.");
+    });
   }
 
   function checkMatch() {
@@ -287,21 +351,22 @@ function startCocokkanKata() {
         (p) => p.word === selectedWord && p.match === selectedMatch
       );
       if (correct) {
-        alert("Pasangan benar!");
+        showMessage("Pasangan benar!");
         score++;
-        matchedPairs.push([selectedWord, selectedMatch]);
         words = words.filter((w) => w !== selectedWord);
         matches = matches.filter((m) => m !== selectedMatch);
         selectedWord = null;
         selectedMatch = null;
         if (words.length === 0) {
-          alert(`Game selesai! Skor Anda: ${score}/${matchGameData.length}`);
-          gameContainer.innerHTML = "";
+          setTimeout(() => {
+            showMessage(`Game selesai! Skor Anda: ${score}/${matchGameData.length}`);
+            gameContainer.innerHTML = "";
+          }, 1000);
           return;
         }
         renderGame();
       } else {
-        alert("Pasangan salah, coba lagi.");
+        showMessage("Pasangan salah, coba lagi.", true);
         selectedWord = null;
         selectedMatch = null;
         renderGame();
