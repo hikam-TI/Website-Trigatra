@@ -358,3 +358,91 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Game buttons */
+.option-btn, .word-btn, .match-btn {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  margin: 0.3rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  user-select: none;
+}
+.option-btn:hover, .word-btn:hover, .match-btn:hover {
+  background: #4338ca;
+  transform: scale(1.05);
+}
+.option-btn:active, .word-btn:active, .match-btn:active {
+  transform: scale(0.95);
+}
+.option-btn:disabled, .word-btn:disabled {
+  background: #a5b4fc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Selected state */
+.selected {
+  box-shadow: 0 0 10px 3px #4f46e5;
+  background: #4338ca !important;
+}
+
+/* Sentence area */
+.sentence-area {
+  min-height: 2.5rem;
+  margin: 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Button group */
+.btn-group {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+.btn-group button {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.btn-group button:disabled {
+  background: #a5b4fc;
+  cursor: not-allowed;
+}
+.btn-group button:hover:not(:disabled) {
+  background: #4338ca;
+}
+
+/* Exit button */
+.exit-btn {
+  background: #ef4444;
+  margin-left: auto;
+}
+.exit-btn:hover {
+  background: #b91c1c;
+}
+
+/* Match container */
+.match-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin: 1rem 0 2rem;
+}
+.match-column {
+  flex: 1;
+  background: #eef2ff;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgb
