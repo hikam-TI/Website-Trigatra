@@ -1,4 +1,58 @@
-// Data untuk game Tebak Kata
+// Toggle navigation menu on mobile
+const navToggle = document.getElementById("nav-toggle");
+const nav = document.getElementById("nav");
+navToggle.addEventListener("click", () => {
+  nav.classList.toggle("nav-open");
+});
+
+// Data pembelajaran
+const learningData = {
+  kosakata: `
+    <h3>Kosakata Lengkap</h3>
+    <p>Pelajari ribuan kosakata bahasa Indonesia dari berbagai kategori seperti sehari-hari, bisnis, teknologi, dan budaya.</p>
+    <ul>
+      <li><strong>Buku</strong> - Book</li>
+      <li><strong>Guru</strong> - Teacher</li>
+      <li><strong>Teman</strong> - Friend</li>
+      <li><strong>Rumah</strong> - House</li>
+      <li><strong>Makan</strong> - Eat</li>
+    </ul>
+  `,
+  tatabahasa: `
+    <h3>Tata Bahasa Mendalam</h3>
+    <p>Pelajari aturan tata bahasa Indonesia mulai dari dasar hingga tingkat lanjut dengan contoh dan latihan soal.</p>
+    <ul>
+      <li><strong>Kalimat aktif dan pasif</strong></li>
+      <li><strong>Penggunaan kata depan</strong></li>
+      <li><strong>Penggunaan imbuhan</strong></li>
+      <li><strong>Jenis kata (kata benda, kata kerja, dll.)</strong></li>
+    </ul>
+  `,
+  percakapan: `
+    <h3>Percakapan Sehari-hari</h3>
+    <p>Latihan percakapan dalam berbagai situasi dan konteks.</p>
+    <ul>
+      <li><strong>Salam dan perkenalan</strong></li>
+      <li><strong>Memesan makanan di restoran</strong></li>
+      <li><strong>Berbelanja di pasar</strong></li>
+      <li><strong>Menanyakan arah</strong></li>
+    </ul>
+  `,
+};
+
+// Event listener untuk tombol pembelajaran
+const learnButtons = document.querySelectorAll(".learn-btn");
+const learningContent = document.getElementById("learning-content");
+
+learnButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const topic = btn.getAttribute("data-topic");
+    learningContent.innerHTML = learningData[topic] || "<p>Materi belum tersedia.</p>";
+    learningContent.scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+// Data game Tebak Kata
 const wordGuessData = [
   {
     question: "Apa bahasa Indonesia dari 'Book'?",
@@ -17,7 +71,7 @@ const wordGuessData = [
   },
 ];
 
-// Data untuk game Susun Kalimat
+// Data game Susun Kalimat
 const sentenceData = [
   {
     words: ["saya", "pergi", "ke", "sekolah"],
@@ -29,22 +83,16 @@ const sentenceData = [
   },
 ];
 
-// Data untuk game Cocokkan Kata
+// Data game Cocokkan Kata
 const matchGameData = [
   { word: "Buku", match: "Book" },
   { word: "Guru", match: "Teacher" },
   { word: "Teman", match: "Friend" },
 ];
 
-// Elemen DOM
-const navToggle = document.getElementById("nav-toggle");
-const nav = document.getElementById("nav");
+// Elemen DOM game
 const gameContainer = document.getElementById("game-container");
 const gameButtons = document.querySelectorAll(".game-btn");
-
-navToggle.addEventListener("click", () => {
-  nav.classList.toggle("nav-open");
-});
 
 // Utility shuffle function
 function shuffle(array) {
@@ -166,4 +214,115 @@ function startSusunKalimat() {
       if (currentIndex < sentenceData.length) {
         renderGame();
       } else {
-        alert(`Game selesai! Sk
+        alert(`Game selesai! Skor Anda: ${score}/${sentenceData.length}`);
+        gameContainer.innerHTML = "";
+      }
+    });
+  }
+
+  renderGame();
+}
+
+// Game Cocokkan Kata
+function startCocokkanKata() {
+  let words = shuffle(matchGameData.map((p) => p.word));
+  let matches = shuffle(matchGameData.map((p) => p.match));
+  let selectedWord = null;
+  let selectedMatch = null;
+  let matchedPairs = [];
+  let score = 0;
+
+  function renderGame() {
+    gameContainer.innerHTML = `
+      <h3>Cocokkan Kata</h3>
+      <p>Cocokkan kata bahasa Indonesia dengan arti yang tepat:</p>
+      <div class="match-container">
+        <div id="words" class="match-column">
+          <h4>Kata</h4>
+          ${words.map((w) => `<button class="match-btn" data-type="word">${w}</button>`).join("")}
+        </div>
+        <div id="matches" class="match-column">
+          <h4>Arti</h4>
+          ${matches.map((m) => `<button class="match-btn" data-type="match">${m}</button>`).join("")}
+        </div>
+      </div>
+      <p>Skor: ${score}</p>
+    `;
+
+    const wordButtons = gameContainer.querySelectorAll('button[data-type="word"]');
+    const matchButtons = gameContainer.querySelectorAll('button[data-type="match"]');
+
+    wordButtons.forEach((btn) =>
+      btn.addEventListener("click", () => {
+        if (selectedWord === btn.textContent) {
+          selectedWord = null;
+          btn.classList.remove("selected");
+        } else {
+          selectedWord = btn.textContent;
+          wordButtons.forEach((b) => b.classList.remove("selected"));
+          btn.classList.add("selected");
+        }
+        checkMatch();
+      })
+    );
+
+    matchButtons.forEach((btn) =>
+      btn.addEventListener("click", () => {
+        if (selectedMatch === btn.textContent) {
+          selectedMatch = null;
+          btn.classList.remove("selected");
+        } else {
+          selectedMatch = btn.textContent;
+          matchButtons.forEach((b) => b.classList.remove("selected"));
+          btn.classList.add("selected");
+        }
+        checkMatch();
+      })
+    );
+  }
+
+  function checkMatch() {
+    if (selectedWord && selectedMatch) {
+      const correct = matchGameData.find(
+        (p) => p.word === selectedWord && p.match === selectedMatch
+      );
+      if (correct) {
+        alert("Pasangan benar!");
+        score++;
+        matchedPairs.push([selectedWord, selectedMatch]);
+        words = words.filter((w) => w !== selectedWord);
+        matches = matches.filter((m) => m !== selectedMatch);
+        selectedWord = null;
+        selectedMatch = null;
+        if (words.length === 0) {
+          alert(`Game selesai! Skor Anda: ${score}/${matchGameData.length}`);
+          gameContainer.innerHTML = "";
+          return;
+        }
+        renderGame();
+      } else {
+        alert("Pasangan salah, coba lagi.");
+        selectedWord = null;
+        selectedMatch = null;
+        renderGame();
+      }
+    }
+  }
+
+  renderGame();
+}
+
+// Event listener untuk tombol game
+gameButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const game = btn.getAttribute("data-game");
+    if (game === "tebak-kata") {
+      startTebakKata();
+    } else if (game === "susun-kalimat") {
+      startSusunKalimat();
+    } else if (game === "cocokkan-kata") {
+      startCocokkanKata();
+    }
+    gameContainer.scrollIntoView({ behavior: "smooth" });
+  });
+});
