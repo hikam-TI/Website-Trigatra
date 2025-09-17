@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trigatra - Pembelajaran Bahasa Indonesia</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container header-container">
+      <h1 class="logo">Trigatra</h1>
+      <nav class="nav" id="nav">
+        <a href="#belajar" class="nav-link">Belajar</a>
+        <a href="#game" class="nav-link">Game</a>
+        <a href="#tim" class="nav-link">Tim Kami</a>
+        <a href="#kontak" class="nav-link">Kontak</a>
+      </nav>
+      <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu">
+        &#9776;
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-container">
+      <h2>Selamat Datang di Trigatra</h2>
+      <p>Platform pembelajaran bahasa Indonesia yang menyenangkan dan interaktif.</p>
+      <a href="#belajar" class="btn-primary">Mulai Belajar</a>
+    </div>
+  </section>
+
+  <section id="belajar" class="section belajar">
+    <div class="container">
+      <h2>Fitur Pembelajaran Lengkap</h2>
+      <div class="cards">
+        <article class="card">
+          <div class="icon">📚</div>
+          <h3>Kosakata Lengkap</h3>
+          <p>Pelajari ribuan kosakata bahasa Indonesia dari berbagai kategori.</p>
+        </article>
+        <article class="card">
+          <div class="icon">📝</div>
+          <h3>Tata Bahasa Mendalam</h3>
+          <p>Aturan tata bahasa Indonesia dari dasar hingga tingkat lanjut.</p>
+        </article>
+        <article class="card">
+          <div class="icon">💬</div>
+          <h3>Percakapan</h3>
+          <p>Latihan percakapan sehari-hari dengan berbagai situasi.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="game" class="section game">
+    <div class="container">
+      <h2>Game Edukasi</h2>
+      <div class="game-list">
+        <button class="game-btn" data-game="tebak-kata">Tebak Kata</button>
+        <button class="game-btn" data-game="susun-kalimat">Susun Kalimat</button>
+        <button class="game-btn" data-game="cocokkan-kata">Cocokkan Kata</button>
+      </div>
+
+      <div id="game-container" class="game-container"></div>
+    </div>
+  </section>
+
+  <section id="tim" class="section tim">
+    <div class="container">
+      <h2>Tim Kami</h2>
+      <div class="team-grid">
+        <article class="team-member">
+          <img src="https://via.placeholder.com/150" alt="Budi Santoso" />
+          <h3>Budi Santoso</h3>
+          <p>Ahli Bahasa Indonesia</p>
+        </article>
+        <article class="team-member">
+          <img src="https://via.placeholder.com/150" alt="Sari Wijaya" />
+          <h3>Sari Wijaya</h3>
+          <p>Pengembang Game Edukasi</p>
+        </article>
+        <article class="team-member">
+          <img src="https://via.placeholder.com/150" alt="Rina Dewi" />
+          <h3>Rina Dewi</h3>
+          <p>Desainer UI/UX</p>
+        </article>
+        <article class="team-member">
+          <img src="https://via.placeholder.com/150" alt="Ahmad Fauzi" />
+          <h3>Ahmad Fauzi</h3>
+          <p>Pembuat Konten Edukasi</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer id="kontak" class="footer">
+    <div class="container footer-container">
+      <div>
+        <h3>Trigatra</h3>
+        <p>Platform pembelajaran bahasa Indonesia yang interaktif dan menyenangkan.</p>
+      </div>
+      <div>
+        <h3>Kontak</h3>
+        <p>Email: info@trigatra.id</p>
+        <p>Telepon: +62 21 1234 5678</p>
+      </div>
+      <div>
+        <h3>Follow Kami</h3>
+        <div class="social-icons">
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="#" aria-label="Facebook">📘</a>
+          <a href="#" aria-label="Instagram">📸</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Trigatra. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
